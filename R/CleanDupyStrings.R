@@ -14,7 +14,7 @@ CleanDupyStrings = function(string_vec){
                             'è'='e', 'é'='e', 'ê'='e', 'ë'='e', 'ì'='i', 'í'='i', 'î'='i', 'ï'='i', 'ð'='o', 'ñ'='n', 'ò'='o', 'ó'='o', 'ô'='o', 'õ'='o',
                             'ö'='o', 'ø'='o', 'ù'='u', 'ú'='u', 'û'='u', 'ý'='y', 'ý'='y', 'þ'='b', 'ÿ'='y' )
 
-  vec_no_accents = gsubfn(paste(names(unwanted_array),collapse='|'), unwanted_array, string_vec)
+  vec_no_accents = gsubfn::gsubfn(paste(names(unwanted_array),collapse='|'), unwanted_array, string_vec)
   vec_clean_dot_abreviations = gsub(x = vec_no_accents, pattern = "[A-Z]\\..+", "")
   vec_final = stringr::str_match(string = vec_clean_dot_abreviations, pattern = "(\\W|^)(.+)\\2")[,3]
 

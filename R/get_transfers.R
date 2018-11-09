@@ -27,16 +27,16 @@
 #'}
 
 
-get_transfers = function(url, season, include_end_of_loans = TRUE, include_retired = TRUE, include_without_club = TRUE){
+get_transfers = function(url, season = NULL, include_end_of_loans = TRUE, include_retired = TRUE, include_without_club = TRUE){
 
   #Append the season element to the url:
-  url_final = paste0(url,"/plus/?saison_id=", season)
+  url_final = paste0(url,"/plus/?saison_id=", ifelse(is.null(season), substr(Sys.Date(), 1,4), season))
 
   #Extract League Name:
   league_name = url_final %>%
-    read_html() %>%
-    xml_find_all("//h1[@class = 'spielername-profil']") %>%
-    xml_text() %>%
+    xml2::read_html() %>%
+    xml2::xml_find_all("//h1[@class = 'spielername-profil']") %>%
+    xml2::xml_text() %>%
     trimws("b")
 
   #Create a list made of tables/data-frames on the transfer summary webpage:
@@ -47,8 +47,8 @@ get_transfers = function(url, season, include_end_of_loans = TRUE, include_retir
     lapply(function(team){
 
       team %>%
-        html_nodes("table") %>%
-        html_table(trim = TRUE) %>%
+        rvest::html_nodes("table") %>%
+        rvest::html_table(trim = TRUE) %>%
 
         #For each of the tables we standardize and clean the columns and names to be able to simultaneously use the Out and In table:
         purrr::map_df(function(table){
@@ -57,8 +57,8 @@ get_transfers = function(url, season, include_end_of_loans = TRUE, include_retir
           colnames(table) = c("Player", "Age", "Nationality", "Position", "Position_Code", "Market_Value", "nada", "To_From", "Fee")
 
           table_club = table %>%
-            mutate_all(funs(ifelse(. == "-" | . == "?", NA, .))) %>%
-            mutate(Market_Value_new = CleanFee(Market_Value),
+            dplyr::mutate_all(dplyr::funs(ifelse(. == "-" | . == "?", NA, .))) %>%
+            dplyr::mutate(Market_Value_new = CleanFee(Market_Value),
                    Fee_new = CleanFee(Fee),
                    Transfer_Type = ifelse(grepl(x = Fee, pattern = "loan", ignore.case = TRUE), "Loan", "Transfer"),
                    Player = CleanDupyStrings(Player),
@@ -66,14 +66,14 @@ get_transfers = function(url, season, include_end_of_loans = TRUE, include_retir
                    League = league_name,
                    Season_Scrapped = paste0(as.integer(season)-1, "/", season),
                    Date_Scrapped = Sys.Date()) %>%
-            select(-Nationality, -nada)
+            dplyr::select(-Nationality)
 
           #Filter out players returning from loan:
           if(include_retired){
             table_club = table_club
           }else{
             table_club = table_club %>%
-              filter(!grepl(x = Fee, pattern = "End of loan"))
+              dplyr::filter(!grepl(x = Fee, pattern = "End of loan"))
           }
 
           #Filter out players retired
@@ -81,7 +81,7 @@ get_transfers = function(url, season, include_end_of_loans = TRUE, include_retir
             table_club = table_club
           }else{
             table_club = table_club %>%
-              filter(To_From != "Retired")
+              dplyr::filter(To_From != "Retired")
           }
 
           #Filter out players without club
@@ -89,7 +89,7 @@ get_transfers = function(url, season, include_end_of_loans = TRUE, include_retir
             table_club = table_club
           }else{
             table_club = table_club %>%
-              filter(To_From != "Without Club")
+              dplyr::filter(To_From != "Without Club")
           }
 
         })
@@ -98,25 +98,25 @@ get_transfers = function(url, season, include_end_of_loans = TRUE, include_retir
 
 
   clubs_header = url_final %>%
-    read_html() %>%
-    xml_find_all("//div[@class = 'large-8 columns']//div[@class = 'box']//div[@class = 'table-header']//a//img")
+    xml2::read_html() %>%
+    xml2::xml_find_all("//div[@class = 'large-8 columns']//div[@class = 'box']//div[@class = 'table-header']//a//img")
 
   clubs = clubs_header %>%
-    xml_attr("alt")
+    xml2::xml_attr("alt")
 
   clubs_icons = clubs_header %>%
-    xml_attr("src")
+    xml2::xml_attr("src")
 
   #Adding the club name to each data-frame:
 
   purrr::map_df(seq_along(clubs), function(i){
 
     all_tables_in_out_transfers[[i]] %>%
-      mutate(Club = clubs[i],
+      dplyr::mutate(Club = clubs[i],
              Club_Icon = clubs_icons[i],
              From = ifelse(Transfer_Direction == "In", To_From, Club),
              To = ifelse(Transfer_Direction == "In", Club, To_From)) %>%
-      select(From, To, Player, Age, Position, Position_Code, Market_Value, Market_Value_new, Fee, Fee_new, Transfer_Type, Transfer_Direction, Club, Club_Icon, League, Season_Scrapped, Date_Scrapped)
+      dplyr::select(From, To, Player, Age, Position, Position_Code, Market_Value, Market_Value_new, Fee, Fee_new, Transfer_Type, Transfer_Direction, Club, Club_Icon, League, Season_Scrapped, Date_Scrapped)
 
 
   })

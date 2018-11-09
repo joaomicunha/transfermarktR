@@ -20,12 +20,12 @@ Transfers_NetworkPlot = function(transfers_df, transfer_fee_bins = 3){
   nodes_edges_list = NodesAndEdges(df = transfers_df,
                                    value_bins = transfer_fee_bins)
 
-  visNetwork(nodes = nodes_edges_list$nodes,
+  visNetwork::visNetwork(nodes = nodes_edges_list$nodes,
              edges = nodes_edges_list$edges,
              main = paste0(unique(finale$League), " Transfers (", unique(finale$Season_Scrapped), " Season)")) %>%
-    visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE, selectedBy = "group") %>%
-    visGroups(groupname = "League Club", shape = "image") %>%
-    visGroups(groupname = "Other League", shape = "dot", color = "grey") %>%
-    addFontAwesome()
+    visNetwork::visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE, selectedBy = "group") %>%
+    visNetwork::visGroups(groupname = "League Club", shape = "image") %>%
+    visNetwork::visGroups(groupname = "Other League", shape = "dot", color = "grey") %>%
+    visNetwork::addFontAwesome()
 
 }
