@@ -20,15 +20,14 @@ NodesAndEdges = function(df, value_bins = 3){
   }
 
   nodes = data.frame(id = unique(c(unique(df$from), unique(df$to))),
-                     # add labels on nodes
-                     #shape = c("circularImage"),
                      label = unique(c(unique(df$from), unique(df$to))),
                      stringsAsFactors = FALSE) %>%
     dplyr::left_join(dplyr::distinct(df, club, club_icon), by = c("id" = "club")) %>%
     dplyr::rename(image = club_icon) %>%
     dplyr::mutate(
       image = ifelse(is.na(image), "", image),
-      group = ifelse(id %in% unique(df$club), "League Club", "Other League"))
+      group = ifelse(id %in% unique(df$club), "League Club", "Other League")) %>%
+    dplyr::arrange(id)
 
 
   edges = df %>%
