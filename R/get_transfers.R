@@ -1,7 +1,4 @@
 
-
-
-
 #' get_transfers
 #'
 #' This function scrappes a transfermarkt webpage to collect a data-frame table with all the transfers for a particular league, season and transfer window.

@@ -4,7 +4,7 @@
 #'
 #' This function is to clean the Player names field that contain accents.
 #'
-#'
+#' @param string_vec A string
 
 CleanDupyStrings = function(string_vec){
 

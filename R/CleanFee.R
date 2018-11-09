@@ -4,7 +4,7 @@
 #'
 #' This function is used to extract numerical values from the Fee field.
 #'
-#'
+#' @param vec_fees Fees column.
 
 
 CleanFee = function(vec_fees){

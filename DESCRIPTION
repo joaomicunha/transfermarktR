@@ -11,7 +11,10 @@ Imports:
     rvest,
     stringr,
     gsubfn,
-    visNetwork
+    visNetwork, 
+    magrittr, 
+    viridis, 
+    purrr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

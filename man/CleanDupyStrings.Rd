@@ -6,6 +6,9 @@
 \usage{
 CleanDupyStrings(string_vec)
 }
+\arguments{
+\item{string_vec}{A string}
+}
 \description{
 This function is to clean the Player names field that contain accents.
 }

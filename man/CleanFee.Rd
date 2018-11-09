@@ -6,6 +6,9 @@
 \usage{
 CleanFee(vec_fees)
 }
+\arguments{
+\item{vec_fees}{Fees column.}
+}
 \description{
 This function is used to extract numerical values from the Fee field.
 }
