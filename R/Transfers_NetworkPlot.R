@@ -22,7 +22,7 @@ Transfers_NetworkPlot = function(transfers_df, transfer_fee_bins = 3){
 
   visNetwork::visNetwork(nodes = nodes_edges_list$nodes,
              edges = nodes_edges_list$edges,
-             main = paste0(unique(finale$League), " Transfers (", unique(finale$Season_Scrapped), " Season)")) %>%
+             main = paste0(unique(transfers_df$League), " Transfers (", unique(transfers_df$Season_Scrapped), " Season)")) %>%
     visNetwork::visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE, selectedBy = "group") %>%
     visNetwork::visGroups(groupname = "League Club", shape = "image") %>%
     visNetwork::visGroups(groupname = "Other League", shape = "dot", color = "grey") %>%

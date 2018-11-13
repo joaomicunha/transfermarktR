@@ -64,7 +64,7 @@ get_transfers = function(url, season = NULL, include_end_of_loans = TRUE, includ
                    Player = CleanDupyStrings(Player),
                    Transfer_Direction = transfer_direction,
                    League = league_name,
-                   Season_Scrapped = paste0(as.integer(season)-1, "/", season),
+                   Season_Scrapped = paste0(season, "/", as.integer(season)+1),
                    Date_Scrapped = Sys.Date()) %>%
             dplyr::select(-Nationality)
 
