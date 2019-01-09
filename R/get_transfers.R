@@ -62,6 +62,7 @@ get_transfers = function(url, season = NULL, include_end_of_loans = TRUE, includ
                    Fee_new = CleanFee(Fee),
                    Transfer_Type = ifelse(grepl(x = Fee, pattern = "loan", ignore.case = TRUE), "Loan", "Transfer"),
                    Player = CleanDupyStrings(Player),
+                  # Age = as.numeric(Age),
                    Transfer_Direction = transfer_direction,
                    League = league_name,
                    Season_Scrapped = paste0(season, "/", as.integer(season)+1),
@@ -103,6 +104,8 @@ get_transfers = function(url, season = NULL, include_end_of_loans = TRUE, includ
 
   clubs = clubs_header %>%
     xml2::xml_attr("alt")
+
+  clubs = setdiff(x = clubs, y = c("Mail", "Twitter", "Facebook"))
 
   clubs_icons = clubs_header %>%
     xml2::xml_attr("src")
