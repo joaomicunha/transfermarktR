@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' tranfers_premierLeague = get_TransfersTransferMarket(url = "https://www.transfermarkt.co.uk/premier-league/sommertransfers/wettbewerb/GB1",
+#' tranfers_premierLeague = get_transfers(url = "https://www.transfermarkt.co.uk/premier-league/sommertransfers/wettbewerb/GB1",
 #'                                      season = "2018",
 #'                                      include_end_of_loans = TRUE,
 #'                                      include_retired = TRUE,
@@ -62,12 +62,13 @@ get_transfers = function(url, season = NULL, include_end_of_loans = TRUE, includ
                    Fee_new = CleanFee(Fee),
                    Transfer_Type = ifelse(grepl(x = Fee, pattern = "loan", ignore.case = TRUE), "Loan", "Transfer"),
                    Player = CleanDupyStrings(Player),
-                  # Age = as.numeric(Age),
+                   Age = as.character(Age),
                    Transfer_Direction = transfer_direction,
                    League = league_name,
                    Season_Scrapped = paste0(season, "/", as.integer(season)+1),
                    Date_Scrapped = Sys.Date()) %>%
-            dplyr::select(-Nationality)
+            dplyr::select(-Nationality) %>%
+            dplyr::filter(!(Player %in% c("No departures", "No arrivals")))
 
           #Filter out players returning from loan:
           if(include_retired){
@@ -105,6 +106,7 @@ get_transfers = function(url, season = NULL, include_end_of_loans = TRUE, includ
   clubs = clubs_header %>%
     xml2::xml_attr("alt")
 
+  #Eliminate
   clubs = setdiff(x = clubs, y = c("Mail", "Twitter", "Facebook"))
 
   clubs_icons = clubs_header %>%
@@ -122,7 +124,8 @@ get_transfers = function(url, season = NULL, include_end_of_loans = TRUE, includ
       dplyr::select(From, To, Player, Age, Position, Position_Code, Market_Value, Market_Value_new, Fee, Fee_new, Transfer_Type, Transfer_Direction, Club, Club_Icon, League, Season_Scrapped, Date_Scrapped)
 
 
-  })
+  }) %>%
+    dplyr::mutate(Age = as.integer(Age))
 
 
 }
