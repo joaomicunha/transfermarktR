@@ -48,7 +48,7 @@ get_transfers = function(url, season = NULL, include_end_of_loans = TRUE, includ
 
       team %>%
         rvest::html_nodes("table") %>%
-        rvest::html_table(trim = TRUE) %>%
+        rvest::html_table(trim = TRUE, fill = TRUE) %>%
 
         #For each of the tables we standardize and clean the columns and names to be able to simultaneously use the Out and In table:
         purrr::map_df(function(table){
