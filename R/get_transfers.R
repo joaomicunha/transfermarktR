@@ -106,11 +106,13 @@ get_transfers = function(url, season = NULL, include_end_of_loans = TRUE, includ
   clubs = clubs_header %>%
     xml2::xml_attr("alt")
 
-  #Eliminate
-  clubs = setdiff(x = clubs, y = c("Mail", "Twitter", "Facebook"))
-
   clubs_icons = clubs_header %>%
     xml2::xml_attr("src")
+
+  #Eliminate "Mail", "Twitter", "Facebook" related info that is being scrapped as club icons/names:
+  clubs = setdiff(x = clubs, y = c("Mail", "Twitter", "Facebook"))
+  clubs_icons = clubs_icons[!grepl(pattern = "mail|Twitter|Facebook", x = clubs_icons)]
+
 
   #Adding the club name to each data-frame:
 
