@@ -3,6 +3,9 @@
 ## transfermarktR
 #### A R Package for quick access to transfer football data sourced from transfermarkt website.
 
+[![Travis build status](https://travis-ci.org/joaomicunha/transfermarktR.svg?branch=master)](https://travis-ci.org/joaomicunha/transfermarktR)
+
+
 The package allows the user to explore the football transfer market for different seasons, transfer windows (summer and winter) and most importantly Leagues. 
 It aims to work to any league covered on the transfermarkt website and all the user has to provide is the relevant link. In the future, the user will be able to choose from a list of leagues from within R. 
 

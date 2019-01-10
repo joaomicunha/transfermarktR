@@ -4,7 +4,7 @@
 \alias{get_transfers}
 \title{get_transfers}
 \usage{
-get_transfers(url, season, include_end_of_loans = TRUE,
+get_transfers(url, season = NULL, include_end_of_loans = TRUE,
   include_retired = TRUE, include_without_club = TRUE)
 }
 \arguments{
@@ -26,7 +26,7 @@ This function scrappes a transfermarkt webpage to collect a data-frame table wit
 }
 \examples{
 \dontrun{
-tranfers_premierLeague = get_TransfersTransferMarket(url = "https://www.transfermarkt.co.uk/premier-league/sommertransfers/wettbewerb/GB1",
+tranfers_premierLeague = get_transfers(url = "https://www.transfermarkt.co.uk/premier-league/sommertransfers/wettbewerb/GB1",
                                      season = "2018",
                                      include_end_of_loans = TRUE,
                                      include_retired = TRUE,
